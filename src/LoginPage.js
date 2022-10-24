@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate, useLocation } from "react-router-dom";
 import "./LoginPage.css";
 import axios from "axios";
-
+import GoogleLogin from "react-google-login";
 
 
 function LoginPage() {
@@ -89,9 +89,14 @@ function LoginPage() {
 
                 <div>
                     <div className='CreateAccountButton' onClick={(e) => { CheckLogin(IdRef.current.value, PasswordRef.current.value,SetWrongPassword,navigate )}}>Login</div>
-                    <div className='CreateAccountButton'> <FontAwesomeIcon icon={faGoogle} className="GoogleIcon" /> Login With Google</div>
+                    <div className='CreateAccountButton' >  
+                    <GoogleLogin
+                        clientId="123297078619-gr155gdnb6a47gi4lutmbjan1pkanfp7.apps.googleusercontent.com"
+                        buttonText="Login With Google"
+                        onSuccess={onSuccess}
+                        onFailure={onFailure}
+                    /> </div>
                     <div className='CreateAccountButton' onClick={()=>{navigate("/sign_up")}}>Create Account</div>
-
                 </div>
 
 
@@ -102,7 +107,15 @@ function LoginPage() {
 
 }
 
+const onSuccess = (res) => {
+    //Render to Login Successfully 
+    console.log(res);
 
+};
+const onFailure = (err) => {
+    //Render to Login Successfully 
+    console.log(err);
+};
 
 function CheckLogin(id, password ,SetWrongPassword,navigate) {
     
