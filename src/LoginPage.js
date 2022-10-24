@@ -7,8 +7,9 @@ import { useNavigate, useLocation } from "react-router-dom";
 import "./LoginPage.css";
 import axios from "axios";
 import GoogleLogin from "react-google-login";
+import {gapi}  from 'gapi-script'
 
-
+const clientId = '123297078619-gr155gdnb6a47gi4lutmbjan1pkanfp7.apps.googleusercontent.com'
 function LoginPage() {
 
     const navigate = useNavigate();
@@ -29,6 +30,10 @@ function LoginPage() {
     }
 
     useEffect(() => {
+
+        gapi.load("client:auth2", () => {
+            gapi.auth2.init({clientId:clientId})
+        })
         if (Seen) {
             document.getElementById("LoginDivShowPasswordIcon").style.display = "none";
             document.getElementById("LoginDivClosePasswordIcon").style.display = "block";
@@ -41,7 +46,7 @@ function LoginPage() {
             document.getElementById("LoginDivClosePasswordIcon").style.display = "none";
             document.getElementById("LoginDivInputPassword").type = "password";
         }
-    })
+    },[])
 
     return (
         <div className="ContaintContainer">
@@ -91,10 +96,11 @@ function LoginPage() {
                     <div className='CreateAccountButton' onClick={(e) => { CheckLogin(IdRef.current.value, PasswordRef.current.value,SetWrongPassword,navigate )}}>Login</div>
                     <div className='CreateAccountButton' >  
                     <GoogleLogin
-                        clientId="123297078619-gr155gdnb6a47gi4lutmbjan1pkanfp7.apps.googleusercontent.com"
+                        clientId={clientId}
                         buttonText="Login With Google"
                         onSuccess={onSuccess}
                         onFailure={onFailure}
+                        cookiePolicy={'single_host_origin'}
                     /> </div>
                     <div className='CreateAccountButton' onClick={()=>{navigate("/sign_up")}}>Create Account</div>
                 </div>
