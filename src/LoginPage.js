@@ -29,6 +29,20 @@ function LoginPage() {
         }
     }
 
+
+    const onSuccess = (res) => {
+        //Render to Login Successfully 
+        console.log(res);
+        navigate(`/after_login`);
+    
+    };
+
+    const onFailure = (err) => {
+        //Render to Login Successfully 
+        console.log(err);
+        SetWrongPassword(true);
+    };
+
     useEffect(() => {
 
         gapi.load("client:auth2", () => {
@@ -94,14 +108,15 @@ function LoginPage() {
 
                 <div>
                     <div className='CreateAccountButton' onClick={(e) => { CheckLogin(IdRef.current.value, PasswordRef.current.value,SetWrongPassword,navigate )}}>Login</div>
-                    <div className='CreateAccountButton' >  
+                    <div className='CreateAccountButton' onClick={clickongoogleapi}> <FontAwesomeIcon icon={faGoogle} className="GoogleIcon" /> Login With Google</div>
                     <GoogleLogin
                         clientId={clientId}
                         buttonText="Login With Google"
                         onSuccess={onSuccess}
                         onFailure={onFailure}
                         cookiePolicy={'single_host_origin'}
-                    /> </div>
+                        className="GoogleAPIButton"
+                    />
                     <div className='CreateAccountButton' onClick={()=>{navigate("/sign_up")}}>Create Account</div>
                 </div>
 
@@ -113,15 +128,12 @@ function LoginPage() {
 
 }
 
-const onSuccess = (res) => {
-    //Render to Login Successfully 
-    console.log(res);
 
-};
-const onFailure = (err) => {
-    //Render to Login Successfully 
-    console.log(err);
-};
+function clickongoogleapi()
+{
+    console.log("yes");
+    document.getElementsByClassName("GoogleAPIButton")[0].click();
+}
 
 function CheckLogin(id, password ,SetWrongPassword,navigate) {
     
