@@ -6,9 +6,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate, useLocation } from "react-router-dom";
 import "./LoginPage.css";
 import axios from "axios";
+import GoogleLogin from "react-google-login";
+import {gapi}  from 'gapi-script'
 
-
-
+const clientId = '123297078619-gr155gdnb6a47gi4lutmbjan1pkanfp7.apps.googleusercontent.com'
 function LoginPage() {
 
     const navigate = useNavigate();
@@ -28,7 +29,25 @@ function LoginPage() {
         }
     }
 
+
+    const onSuccess = (res) => {
+        //Render to Login Successfully 
+        console.log(res);
+        navigate(`/after_login`);
+    
+    };
+
+    const onFailure = (err) => {
+        //Render to Login Successfully 
+        console.log(err);
+        SetWrongPassword(true);
+    };
+
     useEffect(() => {
+
+        gapi.load("client:auth2", () => {
+            gapi.auth2.init({clientId:clientId})
+        })
         if (Seen) {
             document.getElementById("LoginDivShowPasswordIcon").style.display = "none";
             document.getElementById("LoginDivClosePasswordIcon").style.display = "block";
@@ -41,7 +60,7 @@ function LoginPage() {
             document.getElementById("LoginDivClosePasswordIcon").style.display = "none";
             document.getElementById("LoginDivInputPassword").type = "password";
         }
-    })
+    },[])
 
     return (
         <div className="ContaintContainer">
@@ -89,9 +108,16 @@ function LoginPage() {
 
                 <div>
                     <div className='CreateAccountButton' onClick={(e) => { CheckLogin(IdRef.current.value, PasswordRef.current.value,SetWrongPassword,navigate )}}>Login</div>
-                    <div className='CreateAccountButton'> <FontAwesomeIcon icon={faGoogle} className="GoogleIcon" /> Login With Google</div>
+                    <div className='CreateAccountButton' onClick={clickongoogleapi}> <FontAwesomeIcon icon={faGoogle} className="GoogleIcon" /> Login With Google</div>
+                    <GoogleLogin
+                        clientId={clientId}
+                        buttonText="Login With Google"
+                        onSuccess={onSuccess}
+                        onFailure={onFailure}
+                        cookiePolicy={'single_host_origin'}
+                        className="GoogleAPIButton"
+                    />
                     <div className='CreateAccountButton' onClick={()=>{navigate("/sign_up")}}>Create Account</div>
-
                 </div>
 
 
@@ -103,6 +129,11 @@ function LoginPage() {
 }
 
 
+function clickongoogleapi()
+{
+    console.log("yes");
+    document.getElementsByClassName("GoogleAPIButton")[0].click();
+}
 
 function CheckLogin(id, password ,SetWrongPassword,navigate) {
     

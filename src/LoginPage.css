@@ -61,3 +61,8 @@
 {
     margin-right: 10px;
 }
+
+.GoogleAPIButton
+{
+    display:none !important;
+}
