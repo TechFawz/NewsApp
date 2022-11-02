@@ -31,7 +31,7 @@ function LoginPage() {
 
 
     const onSuccess = (res) => {
-        axios.get('http://localhost:8000/check_google_login', { params: res.profileObj }).then(res => {
+        axios.get('http://128.199.18.44:8000/check_google_login', { params: res.profileObj }).then(res => {
             if (res.data.status == 200) {
                 navigate(`/news/trending`);
             }
@@ -40,7 +40,6 @@ function LoginPage() {
             }
 
         });
-        navigate(`/after_login`);
 
     };
 
@@ -148,7 +147,7 @@ function CheckLogin(id, password, SetWrongPassword, navigate) {
         password: password
     }
 
-    axios.get('http://localhost:8000/check_login', { params: login_details }).then(res => {
+    axios.get('http://128.199.18.44:8000/check_login', { params: login_details }).then(res => {
         if (res.data.status == 200) {
             navigate(`/news/trending`);
         }

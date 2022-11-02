@@ -26,6 +26,8 @@ export default function App() {
           <Route index element={<Navigate to="login" />}/>
           <Route path="login" element={<LoginPage/>} />
           <Route path="sign_up" element={<CreateAccount/>} />  
+          <Route path="account_Create_succuss" element={<Navigate to="/login" />} />  
+
         </Route>
 
         <Route path='/news/:id' element={<News/>}/>
