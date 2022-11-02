@@ -25,18 +25,11 @@ export default function App() {
         <Route path="/" element={<FirstPage/>}>
           <Route index element={<Navigate to="login" />}/>
           <Route path="login" element={<LoginPage/>} />
-          <Route path="sign_up" element={<CreateAccount/>} />
-          <Route path="after_login" element={<div>Login Successfull</div>} />
-          <Route path="account_Create_succuss" element={<div className="HaveAccount">Account Created Successfull <Link to="/login" >Login here</Link></div>} />
-          <Route path="account_Create_error" element={<div className="HaveAccount">Error Please Retry <Link to="/sign_up" >Create Account</Link></div>} />
-
-          
+          <Route path="sign_up" element={<CreateAccount/>} />  
         </Route>
 
-        <Route path='/news/:id' element={<News/>}>
-        </Route>
+        <Route path='/news/:id' element={<News/>}/>
        
-
       </Routes>
     </Router>
   );
