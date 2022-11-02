@@ -7,7 +7,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import "./LoginPage.css";
 import axios from "axios";
 import GoogleLogin from "react-google-login";
-import {gapi}  from 'gapi-script'
+import { gapi } from 'gapi-script'
 
 const clientId = '123297078619-gr155gdnb6a47gi4lutmbjan1pkanfp7.apps.googleusercontent.com'
 function LoginPage() {
@@ -31,14 +31,20 @@ function LoginPage() {
 
 
     const onSuccess = (res) => {
-        //Render to Login Successfully 
-        console.log(res);
+        axios.get('http://localhost:8000/check_google_login', { params: res.profileObj }).then(res => {
+            if (res.data.status == 200) {
+                navigate(`/news/trending`);
+            }
+            else {
+                SetWrongPassword(true);
+            }
+
+        });
         navigate(`/after_login`);
-    
+
     };
 
     const onFailure = (err) => {
-        //Render to Login Successfully 
         console.log(err);
         SetWrongPassword(true);
     };
@@ -46,7 +52,7 @@ function LoginPage() {
     useEffect(() => {
 
         gapi.load("client:auth2", () => {
-            gapi.auth2.init({clientId:clientId})
+            gapi.auth2.init({ clientId: clientId })
         })
         if (Seen) {
             document.getElementById("LoginDivShowPasswordIcon").style.display = "none";
@@ -60,7 +66,7 @@ function LoginPage() {
             document.getElementById("LoginDivClosePasswordIcon").style.display = "none";
             document.getElementById("LoginDivInputPassword").type = "password";
         }
-    },[])
+    }, [])
 
     return (
         <div className="ContaintContainer">
@@ -107,7 +113,7 @@ function LoginPage() {
                 <p className="WrongPasword" style={StyleForWrongPassword()}>Your Username or Password is Wrong. Please try again</p>
 
                 <div>
-                    <div className='CreateAccountButton' onClick={(e) => { CheckLogin(IdRef.current.value, PasswordRef.current.value,SetWrongPassword,navigate )}}>Login</div>
+                    <div className='CreateAccountButton' onClick={(e) => { CheckLogin(IdRef.current.value, PasswordRef.current.value, SetWrongPassword, navigate) }}>Login</div>
                     <div className='CreateAccountButton' onClick={clickongoogleapi}> <FontAwesomeIcon icon={faGoogle} className="GoogleIcon" /> Login With Google</div>
                     <GoogleLogin
                         clientId={clientId}
@@ -117,7 +123,7 @@ function LoginPage() {
                         cookiePolicy={'single_host_origin'}
                         className="GoogleAPIButton"
                     />
-                    <div className='CreateAccountButton' onClick={()=>{navigate("/sign_up")}}>Create Account</div>
+                    <div className='CreateAccountButton' onClick={() => { navigate("/sign_up") }}>Create Account</div>
                 </div>
 
 
@@ -129,14 +135,13 @@ function LoginPage() {
 }
 
 
-function clickongoogleapi()
-{
+function clickongoogleapi() {
     console.log("yes");
     document.getElementsByClassName("GoogleAPIButton")[0].click();
 }
 
-function CheckLogin(id, password ,SetWrongPassword,navigate) {
-    
+function CheckLogin(id, password, SetWrongPassword, navigate) {
+
 
     const login_details = {
         id: id,
@@ -145,7 +150,7 @@ function CheckLogin(id, password ,SetWrongPassword,navigate) {
 
     axios.get('http://localhost:8000/check_login', { params: login_details }).then(res => {
         if (res.data.status == 200) {
-            navigate(`/after_login`);
+            navigate(`/news/trending`);
         }
         else {
             SetWrongPassword(true);

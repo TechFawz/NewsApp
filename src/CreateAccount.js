@@ -31,7 +31,7 @@ function CreateAccount() {
    
     return (
 
-        <MDBCard className='m-5' style={{maxWidth: '600px'}}>
+        <MDBCard className='m-5' style={{maxWidth: '600px',minWidth:"250px"}}>
         <MDBCardBody className='px-5'>
           <h2 className="text-uppercase text-center mb-5">Create an account</h2>
           <MDBInput wrapperClass='mb-4' label='Your Name' id='form1' type='text'/>

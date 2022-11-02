@@ -4,6 +4,7 @@ import './index.css';
 import FirstPage from "./FirstPage";
 import LoginPage from "./LoginPage";
 import CreateAccount from "./CreateAccount";
+import News from './news';
 import { BrowserRouter as Router, Routes, Route, Navigate ,Link} from "react-router-dom";
 
 
@@ -31,7 +32,11 @@ export default function App() {
 
           
         </Route>
+
+        <Route path='/news/:id' element={<News/>}>
+        </Route>
        
+
       </Routes>
     </Router>
   );
