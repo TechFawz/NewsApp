@@ -67,9 +67,11 @@ function Create(SetWrongPassword,navigate)
         Password:Password1
     }
 
-    axios.get('http://128.199.18.44:8000/sign_up', { params: data }).then(res => {
+    axios.get('http://localhost:8000/sign_up', { params: data }).then(res => {
         if (res.data.status == 200) {
-            navigate(`/account_Create_succuss`);
+            localStorage.setItem("UserId",res.data.UserId);
+            localStorage.setItem("token",res.data.token);
+            navigate(`/news/trending`);
         }
         else {
             navigate(`/account_Create_error`);

@@ -61,6 +61,10 @@
     cursor: pointer;
 }
 
+.ProfileButton
+{
+   position: relative;
+}
 
 @media screen and (max-width: 500px) {
 

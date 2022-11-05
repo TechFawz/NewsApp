@@ -8,7 +8,8 @@
     overflow: auto;
     padding: 5vh 5vw;
     display: grid;
-    gap: 8vh;;
+    gap: 8vh;
+    z-index: -1;
 }
 
 .CardContainer

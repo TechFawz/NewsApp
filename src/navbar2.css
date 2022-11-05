@@ -14,6 +14,7 @@ a{
     background-color: #3A7576;
     gap: 20px;
     overflow: auto;
+    z-index: -1;
 }
 
 .active

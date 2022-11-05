@@ -18,6 +18,13 @@ function LoginPage() {
     const IdRef = useRef();
     const PasswordRef = useRef();
 
+    useEffect(()=>{
+        if(localStorage.getItem("token"))
+        {
+            console.log(localStorage.getItem("token"));
+            navigate("/news/trending");
+        }
+    })
 
 
     const StyleForWrongPassword = () => {
@@ -31,8 +38,10 @@ function LoginPage() {
 
 
     const onSuccess = (res) => {
-        axios.get('http://128.199.18.44:8000/check_google_login', { params: res.profileObj }).then(res => {
-            if (res.data.status == 200) {
+        axios.get('http://localhost:8000/check_google_login', { params: res.profileObj }).then(res => {
+            if (res.status != 401 ) {
+                localStorage.setItem("UserId",res.data.UserId);
+                localStorage.setItem("token",res.data.token);
                 navigate(`/news/trending`);
             }
             else {
@@ -53,6 +62,11 @@ function LoginPage() {
         gapi.load("client:auth2", () => {
             gapi.auth2.init({ clientId: clientId })
         })
+        
+    }, [])
+
+    useEffect(()=>{
+
         if (Seen) {
             document.getElementById("LoginDivShowPasswordIcon").style.display = "none";
             document.getElementById("LoginDivClosePasswordIcon").style.display = "block";
@@ -65,7 +79,7 @@ function LoginPage() {
             document.getElementById("LoginDivClosePasswordIcon").style.display = "none";
             document.getElementById("LoginDivInputPassword").type = "password";
         }
-    }, [])
+    })
 
     return (
         <div className="ContaintContainer">
@@ -147,8 +161,10 @@ function CheckLogin(id, password, SetWrongPassword, navigate) {
         password: password
     }
 
-    axios.get('http://128.199.18.44:8000/check_login', { params: login_details }).then(res => {
-        if (res.data.status == 200) {
+    axios.get('http://localhost:8000/check_login', { params: login_details }).then(res => {
+        if (res.status != 401) {
+            localStorage.setItem("UserId",res.data.UserId);
+            localStorage.setItem("token",res.data.token);
             navigate(`/news/trending`);
         }
         else {
