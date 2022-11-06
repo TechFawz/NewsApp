@@ -15,7 +15,7 @@ function SideProfile(data) {
 
     useEffect(() => {
         const user = { "UserId": localStorage.getItem("UserId") }
-        axios.get('http://localhost:8000/user_name', {params: user , headers: { "authorization": localStorage.getItem("token") } }).then(res => {
+        axios.get('http://128.199.18.44:8000/user_name', {params: user , headers: { "authorization": localStorage.getItem("token") } }).then(res => {
             
           
             if (res.status == 200) {
