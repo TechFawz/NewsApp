@@ -38,10 +38,10 @@ function LoginPage() {
 
 
     const onSuccess = (res) => {
-        axios.get('http://128.199.18.44/check_google_login', { params: res.profileObj }).then(res => {
-            if (res.status != 401 ) {
-                localStorage.setItem("UserId",res.data.UserId);
-                localStorage.setItem("token",res.data.token);
+        axios.get('http://128.199.18.44:8000/check_google_login', { params: res.profileObj }).then(ress => {
+            if (ress.status == 200 ) {
+                localStorage.setItem("UserId",ress.data.UserId);
+                localStorage.setItem("token",ress.data.token);
                 navigate(`/news/trending`);
             }
             else {

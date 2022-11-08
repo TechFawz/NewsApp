@@ -68,7 +68,7 @@ function Create(SetWrongPassword,navigate)
     }
 
     axios.get('http://128.199.18.44:8000/sign_up', { params: data }).then(res => {
-        if (res.data.status == 200) {
+        if (res.status == 200) {
             localStorage.setItem("UserId",res.data.UserId);
             localStorage.setItem("token",res.data.token);
             navigate(`/news/trending`);

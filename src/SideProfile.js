@@ -38,11 +38,14 @@ function SideProfile(data) {
     }
 
     const img_src = ()=>{
-        if(p_details.profile_url=="")
+        // if(p_details.profile_url==null)
         return profile_default;
 
-        else
-        return p_details.profile_url;
+        // else
+        // {
+        //     const profile_image = require(p_details.profile_url);
+        //     return profile_image;
+        // }
     }
 
     const LogOut = ()=>{
