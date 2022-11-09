@@ -72,4 +72,7 @@ function SideProfile(data) {
     )
 }
 
+
+
+
 export default SideProfile;

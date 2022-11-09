@@ -41,27 +41,24 @@ function Card(item) {
 
 
 function msToTime(duration) {
-    var milliseconds = Math.floor((duration % 1000) / 100),
-      seconds = Math.floor((duration / 1000) % 60),
-      minutes = Math.floor((duration / (1000 * 60)) % 60),
-      hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
-  
-    hours = (hours < 10) ? "0" + hours : hours;
-    minutes = (minutes < 10) ? "0" + minutes : minutes;
-    seconds = (seconds < 10) ? "0" + seconds : seconds;
+    var seconds = Math.ceil((duration / 1000));
+    var minutes = Math.floor((duration / (1000 * 60) ));
+    var hours = Math.floor((duration / (1000 * 60 * 60)));
+    var days = Math.floor((duration / (1000 * 60 * 60 * 24)));
+
 
     if(hours==0)
     {
-        return(<div>{minutes/1} min</div>)
+        return(<div>{minutes} min</div>)
     }
-    else if(hours<24)
+    else if(days==0)
     {
-        return(<div>{hours/1} hrs</div>)
+        return(<div>{hours} hrs</div>)
 
     }
     else
     {
-        return(<div>{hours/24} days</div>)
+        return(<div>{days} days</div>)
     }
   
   }

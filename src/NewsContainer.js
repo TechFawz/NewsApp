@@ -22,7 +22,11 @@ function NewContainer() {
     useEffect(() => {
         axios.get(`https://newsapi.org/v2/everything?q=${id}&apiKey=4cc62fc209b046e6bdf98fc4fcf9abbc`).then(
             function (respone) {
-                SetData(respone.data.articles);
+                let array = respone.data.articles.sort(function(a,b){
+                    return new Date(b.publishedAt) - new Date(a.publishedAt);
+                });
+
+                SetData(array);
             }
         )
 
@@ -78,4 +82,7 @@ function CardContainer(item) {
     )
 
 }
+
+
+
 export default NewContainer;
