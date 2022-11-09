@@ -18,6 +18,8 @@ import axios from "axios";
 function CreateAccount() {
 
     const [WrongPassword, SetWrongPassword] = useState(false);
+    const [resone, SetResone] = useState("");
+
     const navigate = useNavigate();
 
     const StyleForWrongPassword = () => {
@@ -28,6 +30,8 @@ function CreateAccount() {
             return { display: "none", }
         }
     }
+
+
    
     return (
 
@@ -39,25 +43,25 @@ function CreateAccount() {
           <MDBInput wrapperClass='mb-4' label='Password'  id='form3' type='password'/>
           <MDBInput wrapperClass='mb-4' label='Repeat your password' id='form4' type='password'/>
 
-          <p className="WrongPasword" style={StyleForWrongPassword()}>Passsword Not Match</p>
+          <p className="WrongPasword" style={StyleForWrongPassword()}>{resone}</p>
 
           <div className='d-flex flex-row justify-content-center mb-4'>
-            <MDBCheckbox name='flexCheck' id='flexCheckDefault' label='I agree all statements in Terms of service' />
           </div>
-          <div className=' CreateAccountButton'   onClick={()=>Create(SetWrongPassword,navigate)}>Register</div>
+          <div className=' CreateAccountButton'   onClick={()=>Create(SetWrongPassword,navigate,SetResone)}>Register</div>
           <div className="HaveAccount">Have already an account <Link to="/login" >Login here</Link></div>
         </MDBCardBody>
       </MDBCard>
     )
 }
 
-function Create(SetWrongPassword,navigate)
+function Create(SetWrongPassword,navigate,SetResone)
 {
     const Password1=document.getElementById("form3").value;
     const Passsword2 = document.getElementById("form4").value;
     if(Password1!=Passsword2)
     {
         SetWrongPassword(true);
+        SetResone("Password Not Match Try Again")
         return;
     }
 
@@ -68,16 +72,28 @@ function Create(SetWrongPassword,navigate)
     }
 
     axios.get('http://128.199.18.44:8000/sign_up', { params: data }).then(res => {
-        if (res.status == 200) {
+        if(res.data.UserId=="Email Id Used")
+        {
+            SetWrongPassword(true);
+            SetResone("This Email Id is Already Registered ")
+        }
+        else
+        {
             localStorage.setItem("UserId",res.data.UserId);
             localStorage.setItem("token",res.data.token);
             navigate(`/news/trending`);
         }
-        else {
-            navigate(`/account_Create_error`);
-        }
+            
+     
+           
+        
 
-    });
+    },err=>{
+        SetWrongPassword(true);
+        SetResone("Error Try Again Later")    });
 }
 
 export default CreateAccount;
+
+
+
