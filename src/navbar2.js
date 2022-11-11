@@ -17,7 +17,6 @@ const Navbar2=()=>{
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(showPosition, positionError);
         } else {
-            console.log("Geolocation is not supported by this browser.");
         }
     }
     

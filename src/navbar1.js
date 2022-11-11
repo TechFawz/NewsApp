@@ -16,7 +16,6 @@ function Navbar1() {
     const [profile,SetProfile] = useState(false);
 
 
-    console.log(profile);
     const handleKeyDown = (e) => {
         if (e.key == "Enter") {
             navigate(`/news/${value.current.value}`);

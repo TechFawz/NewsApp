@@ -5,6 +5,7 @@ import FirstPage from "./FirstPage";
 import LoginPage from "./LoginPage";
 import CreateAccount from "./CreateAccount";
 import News from './news';
+import {Setting,ProfileSetting,EditProfileSetting,EditPassword} from './Setting';
 import { BrowserRouter as Router, Routes, Route, Navigate ,Link} from "react-router-dom";
 
 
@@ -31,6 +32,12 @@ export default function App() {
         </Route>
 
         <Route path='/news/:id' element={<News/>}/>
+        <Route path='/setting' element={<Setting/>}>
+          <Route index element={<Navigate to="profile" />}/>
+          <Route path='profile' element={<ProfileSetting/>}/>
+          <Route path='edit_profile' element={<EditProfileSetting/>}/>
+          <Route path='edit_password' element={<EditPassword/>}/>
+        </Route>
        
       </Routes>
     </Router>

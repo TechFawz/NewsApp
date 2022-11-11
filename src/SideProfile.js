@@ -15,17 +15,12 @@ function SideProfile(data) {
 
     useEffect(() => {
         const user = { "UserId": localStorage.getItem("UserId") }
-        axios.get('http://128.199.18.44:8000/user_name', {params: user , headers: { "authorization": localStorage.getItem("token") } }).then(res => {
-            
-          
-            if (res.status == 200) {
-                SetP_details(res.data);
-            }
-            else 
-            {
-                navigator("/login");
-            }
+        axios.get('http://localhost:8000/user_name', {params: user , headers: { "authorization": localStorage.getItem("token") } }).then(res => {
+             
+             SetP_details(res.data);
 
+        },err=>{
+            navigator("/login");
         });
     }, [])
 
@@ -37,15 +32,17 @@ function SideProfile(data) {
             return "none";
     }
 
-    const img_src = ()=>{
-        // if(p_details.profile_url==null)
-        return profile_default;
+    const img_src = (d)=>{
 
-        // else
-        // {
-        //     const profile_image = require(p_details.profile_url);
-        //     return profile_image;
-        // }
+      
+        if(d.profile_url==null || d.profile_url=="" || d.profile_url==undefined)
+        {
+            return profile_default;
+        }  
+        else
+        {
+            return d.profile_url;
+        }
     }
 
     const LogOut = ()=>{
@@ -53,21 +50,17 @@ function SideProfile(data) {
         localStorage.removeItem("UserId");
         navigate("/login")
     };
-    console.log(img_src());
 
     return (
         <div className='SideProfile' style={{ display: display() }}>
             <div className="SmallProfile">
-                <img src={img_src()} className="ProfileImage" />
+                <img src={img_src(p_details)} className="ProfileImage" />
                 <div className='ProfileName'>{p_details.FirstName}</div>
             </div>
-            <div className='SettingButton'><FontAwesomeIcon icon={faCog} /> Settings</div>
+            <div className='SettingButton' onClick={()=>{navigate("/setting")}}><FontAwesomeIcon icon={faCog} /> Settings</div>
             <div className='SettingButton' onClick={LogOut}><FontAwesomeIcon icon={faSignOut} /> Log Out</div>
 
             <div className='CloseButton' onClick={() => { data.SetProfile(false) }}><FontAwesomeIcon icon={faChevronUp} /></div>
-
-
-
         </div>
     )
 }

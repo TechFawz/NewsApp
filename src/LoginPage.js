@@ -21,7 +21,6 @@ function LoginPage() {
     useEffect(()=>{
         if(localStorage.getItem("token"))
         {
-            console.log(localStorage.getItem("token"));
             navigate("/news/trending");
         }
     })
@@ -38,7 +37,7 @@ function LoginPage() {
 
 
     const onSuccess = (res) => {
-        axios.get('http://128.199.18.44:8000/check_google_login', { params: res.profileObj }).then(ress => {
+        axios.get('http://localhost:8000/check_google_login', { params: res.profileObj }).then(ress => {
                 localStorage.setItem("UserId",ress.data.UserId);
                 localStorage.setItem("token",ress.data.token);
                 navigate(`/news/trending`);
@@ -52,7 +51,6 @@ function LoginPage() {
     };
 
     const onFailure = (err) => {
-        console.log(err);
         SetWrongPassword(true);
     };
 
@@ -148,7 +146,6 @@ function LoginPage() {
 
 
 function clickongoogleapi() {
-    console.log("yes");
     document.getElementsByClassName("GoogleAPIButton")[0].click();
 }
 
@@ -160,7 +157,7 @@ function CheckLogin(id, password, SetWrongPassword, navigate) {
         password: password
     }
 
-    axios.get('http://128.199.18.44:8000/check_login', { params: login_details }).then(res => {
+    axios.get('http://localhost:8000/check_login', { params: login_details }).then(res => {
 
 
             localStorage.setItem("UserId",res.data.UserId);
