@@ -37,7 +37,7 @@ function LoginPage() {
 
 
     const onSuccess = (res) => {
-        axios.get('http://localhost:8000/check_google_login', { params: res.profileObj }).then(ress => {
+        axios.get('http://35.164.216.59:8000/check_google_login', { params: res.profileObj }).then(ress => {
                 localStorage.setItem("UserId",ress.data.UserId);
                 localStorage.setItem("token",ress.data.token);
                 navigate(`/news/trending`);

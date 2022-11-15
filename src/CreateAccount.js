@@ -71,7 +71,7 @@ function Create(SetWrongPassword,navigate,SetResone)
         Password:Password1
     }
 
-    axios.get('http://localhost:8000/sign_up', { params: data }).then(res => {
+    axios.get('http://35.164.216.59:8000/sign_up', { params: data }).then(res => {
         if(res.data.UserId=="Email Id Used")
         {
             SetWrongPassword(true);
