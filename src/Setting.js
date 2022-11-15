@@ -39,7 +39,7 @@ function ProfileSetting() {
 
     useEffect(() => {
         const user = { "UserId": localStorage.getItem("UserId") }
-        axios.get('http://128.199.18.44:8000/user_name', {params: user , headers: { "authorization": localStorage.getItem("token") } }).then(res => {
+        axios.get('http://localhost:8000/user_name', {params: user , headers: { "authorization": localStorage.getItem("token") } }).then(res => {
              
            SetDetails(res.data);
 
@@ -77,7 +77,7 @@ function EditProfileSetting() {
 
     useEffect(() => {
         const user = { "UserId": localStorage.getItem("UserId") }
-        axios.get('http://128.199.18.44:8000/user_name', {params: user , headers: { "authorization": localStorage.getItem("token") } }).then(res => {
+        axios.get('http://localhost:8000/user_name', {params: user , headers: { "authorization": localStorage.getItem("token") } }).then(res => {
              
            SetImage(img_src(res.data));
            InputName.current.value=res.data.FirstName;
@@ -171,7 +171,7 @@ function EditPasswordBackend(OP,NP,NCP,SetWrongPassword,SetResone,navigate)
     }
 
 
-    axios.get('http://128.199.18.44:8000/edit_password', {params: data , headers: { "authorization": localStorage.getItem("token") } }).then(res => {
+    axios.get('http://localhost:8000/edit_password', {params: data , headers: { "authorization": localStorage.getItem("token") } }).then(res => {
         
         if(res.data.changedRows==0)
         {
@@ -206,7 +206,7 @@ function EditProfileDataBackend(name,mail,image,navigate)
     fetch("https://api.cloudinary.com/v1_1/diu2ciwjz/image/upload",options).then(res=>res.json()).then(res=>{
 
      const UserData = {UserId:localStorage.getItem("UserId"),name:name,mail:mail,profile_url:res.secure_url};
-     axios.get('http://128.199.18.44:8000/edit_user_data', {params: UserData , headers: { "authorization": localStorage.getItem("token") } }).then(res => {
+     axios.get('http://localhost:8000/edit_user_data', {params: UserData , headers: { "authorization": localStorage.getItem("token") } }).then(res => {
            
       if(res.message=="Email Id Used")
       {
