@@ -9,7 +9,7 @@ import axios from "axios";
 import GoogleLogin from "react-google-login";
 import { gapi } from 'gapi-script'
 
-const clientId = '123297078619-gr155gdnb6a47gi4lutmbjan1pkanfp7.apps.googleusercontent.com'
+const clientId = '10510044017-mubqkg5u5c3uu8cp1vnst04gqmi80laq.apps.googleusercontent.com'
 function LoginPage() {
 
     const navigate = useNavigate();
@@ -37,7 +37,7 @@ function LoginPage() {
 
 
     const onSuccess = (res) => {
-        axios.get('http://35.164.216.59:8000/check_google_login', { params: res.profileObj }).then(ress => {
+        axios.get('http://18.237.173.209:8000/check_google_login', { params: res.profileObj }).then(ress => {
                 localStorage.setItem("UserId",ress.data.UserId);
                 localStorage.setItem("token",ress.data.token);
                 navigate(`/news/trending`);
