@@ -7,7 +7,9 @@ import { useNavigate, useLocation } from "react-router-dom";
 import "./LoginPage.css";
 import axios from "axios";
 import GoogleLogin from "react-google-login";
-import { gapi } from 'gapi-script'
+import { gapi } from 'gapi-script';
+import ip from "./ipaddress";
+
 
 const clientId = '10510044017-mubqkg5u5c3uu8cp1vnst04gqmi80laq.apps.googleusercontent.com'
 function LoginPage() {
@@ -37,7 +39,7 @@ function LoginPage() {
 
 
     const onSuccess = (res) => {
-        axios.get('http://18.237.173.209:8000/check_google_login', { params: res.profileObj }).then(ress => {
+        axios.get(`http://${ip}:8000/check_google_login`, { params: res.profileObj }).then(ress => {
                 localStorage.setItem("UserId",ress.data.UserId);
                 localStorage.setItem("token",ress.data.token);
                 navigate(`/news/trending`);
@@ -157,7 +159,7 @@ function CheckLogin(id, password, SetWrongPassword, navigate) {
         password: password
     }
 
-    axios.get('http://128.99.18.44:8000/check_login', { params: login_details }).then(res => {
+    axios.get(`http://${ip}:8000/check_login`, { params: login_details }).then(res => {
 
 
             localStorage.setItem("UserId",res.data.UserId);

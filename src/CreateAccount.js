@@ -11,6 +11,7 @@ import {
 import "./CreateAccount.css";
 import { Link ,useNavigate} from "react-router-dom";
 import axios from "axios";
+import ip from "./ipaddress";
 
 
 
@@ -71,7 +72,7 @@ function Create(SetWrongPassword,navigate,SetResone)
         Password:Password1
     }
 
-    axios.get('http://18.237.173.209:8000/sign_up', { params: data }).then(res => {
+    axios.get(`http://${ip}:8000/sign_up`, { params: data }).then(res => {
         if(res.data.UserId=="Email Id Used")
         {
             SetWrongPassword(true);

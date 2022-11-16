@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import profile_default from "./Image/profile_default.png";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
+import ip from "./ipaddress";
 
 
 function SideProfile(data) {
@@ -15,7 +16,7 @@ function SideProfile(data) {
 
     useEffect(() => {
         const user = { "UserId": localStorage.getItem("UserId") }
-        axios.get('http://18.237.173.209:8000/user_name', {params: user , headers: { "authorization": localStorage.getItem("token") } }).then(res => {
+        axios.get(`http://${ip}:8000/user_name`, {params: user , headers: { "authorization": localStorage.getItem("token") } }).then(res => {
              
              SetP_details(res.data);
 
