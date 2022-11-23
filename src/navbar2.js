@@ -1,63 +1,73 @@
 import React, { useEffect, useState } from 'react';
-import "./navbar2.css";
+import './navbar2.css';
 import { NavLink } from 'react-router-dom';
-import { } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {countries} from 'country-data';
+import {} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { countries } from 'country-data';
+import { Outlet, useNavigate } from 'react-router-dom';
 
-const lookup = require("coordinate_to_country");
+const lookup = require('coordinate_to_country');
 
-
-
-const Navbar2=()=>{
-
-    const [country,SetCountry]=useState("Canada"); 
-    function getLocation() {
-    
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(showPosition, positionError);
-        } else {
-        }
+const Navbar2 = () => {
+  const [country, SetCountry] = useState('Canada');
+  const navigate = useNavigate();
+  const systemGeneratedCategories = [
+    'trending',
+    'canada',
+    'weather',
+    'sports',
+    'science',
+    'technology',
+    'politics',
+    'education',
+  ];
+  function getLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(showPosition, positionError);
+    } else {
     }
-    
-    const showPosition=(position)=>{
-        
-        SetCountry(countries[lookup(position.coords.latitude, position.coords.longitude)].name);
+  }
+
+  const showPosition = (position) => {
+    SetCountry(
+      countries[lookup(position.coords.latitude, position.coords.longitude)]
+        .name
+    );
+  };
+
+  const positionError = (error) => {
+    if (error.PERMISSION_DENIED) {
+      window.alert('Error: permission denied');
+    } else {
+      window.alert('Error Please reload WebSite');
     }
-    
-    const positionError=(error)=>{
-        if (error.PERMISSION_DENIED) {
-            window.alert("Error: permission denied");
-        } else {
-            window.alert("Error Please reload WebSite");
-        }
-    }
+  };
 
-    useEffect(()=>{
-        getLocation();
-    },[])
+  useEffect(() => {
+    getLocation();
+  }, []);
 
-   
-
-
-    return (
-        <div className='navbar2'>
-            <NavLink to="/news/trending" className={({ isActive }) => (isActive ? 'active' : 'inactive')} >Trending</NavLink>
-            <NavLink to ={`/news/${country}`} className={({ isActive }) => (isActive ? 'active' : 'inactive')} >{country}</NavLink>
-            <NavLink to={`/news/${country} weather`} className={({ isActive }) => (isActive ? 'active' : 'inactive')} >weather</NavLink>
-            <NavLink to="/news/sports" className={({ isActive }) => (isActive ? 'active' : 'inactive')} >Sports</NavLink>
-            <NavLink to="/news/sience" className={({ isActive }) => (isActive ? 'active' : 'inactive')} >Sience</NavLink>
-            <NavLink to="/news/technology" className={({ isActive }) => (isActive ? 'active' : 'inactive')} >Technology</NavLink>
-            <NavLink to="/news/politics" className={({ isActive }) => (isActive ? 'active' : 'inactive')} >Politics</NavLink>
-            <NavLink to="/news/education" className={({ isActive }) => (isActive ? 'active' : 'inactive')} >Education</NavLink>
-
-        </div>
-    )
-}
-
-
-
-
-
+  return (
+    <div className="navbar2">
+      {systemGeneratedCategories.map((el) => {
+        return (
+          <NavLink
+            to={`/news/${el}`}
+            className={({ isActive }) => (isActive ? 'active' : 'inactive')}
+          >
+            {el}
+          </NavLink>
+        );
+      })}
+      <button
+        onClick={() => {
+          navigate('/select-categories');
+        }}
+      >
+        Choose categories
+      </button>
+    </div>
+  );
+};
 
 export default Navbar2;
