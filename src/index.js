@@ -22,6 +22,9 @@ import Invite from './Invite';
 import Ratings from './Ratings';
 import WatchLater from './WatchLater';
 import SelectCategories from './SelectCategories';
+import UserProfile from './UserProfile';
+import SearchUserCards from './SearchUserCards';
+import PendingRequests from './PendingRequests';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -52,6 +55,9 @@ export default function App() {
           <Route path="edit_password" element={<EditPassword />} />
         </Route>
         <Route path="invite" element={<Invite />} />
+        <Route path="pending-requests" element={<PendingRequests />} />
+        <Route path="search" element={<SearchUserCards />} />
+        <Route path="user/:id" element={<UserProfile />} />
         <Route path="ratings" element={<Ratings />} />
         <Route path="watch-later" element={<WatchLater />} />
         <Route path="select-categories" element={<SelectCategories />} />
