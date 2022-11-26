@@ -90,19 +90,28 @@ function CardContainer(item) {
         ...data,
         ratings: count,
         UserId: userId,
+        watchList: 0,
       })
       .then((response) => {
-        console.log('response is', response);
+        console.log('response after ratings is', response);
+      })
+      .catch((error) => {
+        console.log('error while rating', error);
       });
   };
   const saveWatchLater = (data) => {
     axios
-      .post(`http://${ip}:8000/watch-later`, { ...data, UserId: userId })
+      .post(`http://${ip}:8000/watch`, {
+        ...data,
+        UserId: userId,
+        ratings: 0,
+        watchList: 1,
+      })
       .then((response) => {
-        console.log('response is', response);
+        console.log('response after watch is', response);
       })
       .catch((error) => {
-        console.log('error', error);
+        console.log('error while watchlater', error);
       });
   };
   return (

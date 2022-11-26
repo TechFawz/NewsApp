@@ -4,16 +4,27 @@ import Navbar2 from './navbar2';
 import './Invite.css';
 import axios from 'axios';
 import ip from './ipaddress';
+import { useNavigate } from 'react-router-dom';
 
 const Invite = () => {
   const [email, setEmail] = useState('');
-
+  const senderEmail = localStorage.getItem('email');
+  const navigate = useNavigate();
   const sendInvite = (e) => {
     e.preventDefault();
+    if (!email) {
+      alert('Please enter email');
+      return;
+    }
     axios
-      .post(`http://${ip}:8000/invite`, { email })
+      .post(`http://${ip}:8000/send_invite`, {
+        receiverMail: email,
+        senderEmail,
+      })
       .then((response) => {
         console.log(response);
+        alert('Email send successfully');
+        navigate('/news/trending');
       })
       .catch((error) => {
         console.log(error);
@@ -41,7 +52,9 @@ const Invite = () => {
                 placeholder="abc@xyz.com"
               />
               <div className="btnDiv">
-                <button type="submit">Send</button>
+                <button className="btn btn-primary" type="submit">
+                  Send
+                </button>
               </div>
             </form>
           </div>
