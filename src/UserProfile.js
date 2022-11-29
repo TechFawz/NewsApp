@@ -15,6 +15,9 @@ export default function UserProfile() {
   const [alreadyConnect, setAlreadyConnect] = useState(false);
   const [noOfFollowers, setFollowers] = useState(0);
   const [noOfFriends, setNoOfFriends] = useState(0);
+  const [currentUserData, setCurrentUserData] = useState({
+    FirstName: 'Username',
+  });
   const userId = localStorage.getItem('UserId');
 
   const followPost = () => {
@@ -102,6 +105,16 @@ export default function UserProfile() {
       //     }
       //   })
       //   .catch((err) => window.alert(err));
+      axios
+        .get(`http://${ip}:8000/userDetails`, {
+          params: { UserId: id },
+        })
+        .then((response) => {
+          if (response && response.data) {
+            setCurrentUserData(response.data?.msg);
+          }
+        })
+        .catch((err) => window.alert(err));
 
       getFollowers();
       getFriends();
@@ -120,7 +133,9 @@ export default function UserProfile() {
             alt="User Profile"
           />
           <div className="card-body">
-            <h5 className="card-title text-light">User Name</h5>
+            <h5 className="card-title text-light">
+              {currentUserData.FirstName}
+            </h5>
           </div>
           <div className="d-flex flex-column ">
             <div className="d-flex justify-content-around m-2">
@@ -145,7 +160,8 @@ export default function UserProfile() {
                 className="btn btn-light w-25"
                 onClick={() => navigate(`/followers/${id}`)}
               >
-                Followers &nbsp;{noOfFollowers.length}
+                Followers &nbsp;
+                {noOfFollowers.length}
               </button>
               <button type="button" className="btn btn-light w-25">
                 Friends &nbsp;{noOfFriends}
@@ -159,21 +175,22 @@ export default function UserProfile() {
                   className="btn btn-link text-light w-25"
                   onClick={() => navigate(`/ratings/${id}`)}
                 >
-                  Username's rated news
+                  {`${currentUserData.FirstName} rated news`}
                 </button>
                 <button
                   type="button"
                   className="btn btn-link text-light w-25"
                   onClick={() => navigate(`/watch-later/${id}`)}
                 >
-                  Username's watch later news
+                  {`${currentUserData.FirstName} watch later news`}
                 </button>
                 <button
                   type="button"
                   className="btn btn-link text-light w-25"
                   onClick={() => navigate(`/friends/${id}`)}
                 >
-                  Username's friends
+                  {`${currentUserData.FirstName} friends`}
+                  friends
                 </button>
               </div>
             ) : (

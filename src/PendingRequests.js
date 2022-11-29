@@ -1,8 +1,34 @@
-import React, { useState } from 'react';
+import axios from 'axios';
+import React, { useState, useEffect } from 'react';
+import ip from './ipaddress';
 import Navbar1 from './navbar1';
 import Navbar2 from './navbar2';
 
 const PendingRequests = () => {
+  const acceptRequest = (id) => {
+    axios
+      .post(`http:${ip}:8000/accept-request`, {
+        UserId: localStorage.getItem('UserId'),
+        connectionId: id,
+      })
+      .then((res) => {
+        fetchPendingRequest();
+      })
+      .catch((err) => window.alert(err));
+  };
+
+  const rejectRequest = (id) => {
+    axios
+      .post(`http:${ip}:8000/reject-request`, {
+        UserId: localStorage.getItem('UserId'),
+        connectionId: id,
+      })
+      .then((res) => {
+        fetchPendingRequest();
+      })
+      .catch((err) => window.alert(err));
+  };
+
   const [pendingResults, setPendingResults] = useState([
     { name: 'User One' },
     { name: 'User Two' },
@@ -11,6 +37,23 @@ const PendingRequests = () => {
     { name: 'User Five' },
     { name: 'User Six' },
   ]);
+
+  const fetchPendingRequest = () => {
+    axios
+      .get(`http:${ip}:8000/connection-requests`, {
+        params: { UserId: localStorage.getItem('UserId') },
+      })
+      .then((res) => {
+        if (res && res.msg) {
+          setPendingResults(res.msg);
+        }
+      })
+      .catch((err) => window.alert(err));
+  };
+
+  useEffect(() => {
+    fetchPendingRequest();
+  }, []);
 
   return (
     <>
@@ -26,8 +69,18 @@ const PendingRequests = () => {
               >
                 <span>{user.name}</span>
                 <div>
-                  <button className="btn btn-primary mx-1">Accept</button>
-                  <button className="btn btn-danger mx-1 ">Reject</button>
+                  <button
+                    onClick={() => acceptRequest(user?.id)}
+                    className="btn btn-primary mx-1"
+                  >
+                    Accept
+                  </button>
+                  <button
+                    onClick={() => rejectRequest(user?.id)}
+                    className="btn btn-danger mx-1 "
+                  >
+                    Reject
+                  </button>
                 </div>
               </li>
             );
