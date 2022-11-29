@@ -25,6 +25,7 @@ import SelectCategories from './SelectCategories';
 import UserProfile from './UserProfile';
 import SearchUserCards from './SearchUserCards';
 import PendingRequests from './PendingRequests';
+import UserFriendsOrFollowers from './UserFriendsOrFollowers';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -58,8 +59,10 @@ export default function App() {
         <Route path="pending-requests" element={<PendingRequests />} />
         <Route path="search" element={<SearchUserCards />} />
         <Route path="user/:id" element={<UserProfile />} />
-        <Route path="ratings" element={<Ratings />} />
-        <Route path="watch-later" element={<WatchLater />} />
+        <Route path="friends/:id" element={<UserFriendsOrFollowers />} />
+        <Route path="followers/:id" element={<UserFriendsOrFollowers />} />
+        <Route path="ratings/:id" element={<Ratings />} />
+        <Route path="watch-later/:id" element={<WatchLater />} />
         <Route path="select-categories" element={<SelectCategories />} />
       </Routes>
     </Router>

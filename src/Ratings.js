@@ -4,13 +4,16 @@ import Navbar2 from './navbar2';
 import axios from 'axios';
 import ip from './ipaddress';
 import './NewContainer.css';
+import { Rating } from 'react-simple-star-rating';
+import { useParams } from 'react-router-dom';
+
 export default function Ratings() {
+  const { id } = useParams();
   const [ratings, setRatings] = useState([]);
   const [containtDisplay, SetContaintDisplay] = useState(false);
 
-  const userId = localStorage.getItem('UserId');
   useEffect(() => {
-    const data = { UserId: userId };
+    const data = { UserId: id };
     axios
       .get(`http://${ip}:8000/rate`, { params: data })
       .then((response) => {
@@ -20,7 +23,7 @@ export default function Ratings() {
       .catch((error) => {
         console.log('error while fetching ratings', error);
       });
-  }, [userId]);
+  }, [id]);
   return (
     <div>
       <Navbar1 />
@@ -32,7 +35,7 @@ export default function Ratings() {
             ratings.map((data, index) => {
               return (
                 <div className="col-lg-4 mt-4" key={index}>
-                  <div className="Card" >
+                  <div className="Card">
                     <img src={data.urlToImage} className="CardImage" alt="" />
 
                     <div className="CardDetails">
@@ -67,12 +70,22 @@ export default function Ratings() {
                           </a>
                         </div>
                       </div>
+                      <div className="">
+                        <Rating
+                          readonly
+                          initialValue={data.ratings}
+                          size={20}
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
               );
             })}
         </div>
+        {ratings.length === 0 && (
+          <div className="text-center">You haven't rated any news.</div>
+        )}
       </div>
     </div>
   );

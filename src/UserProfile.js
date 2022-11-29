@@ -3,17 +3,22 @@ import Navbar1 from './navbar1';
 import Navbar2 from './navbar2';
 import profile_default from './Image/profile_default.png';
 import './UserProfile.css';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import ip from './ipaddress';
 import axios from 'axios';
 import { useState } from 'react';
 
 export default function UserProfile() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [alreadyFollowed, setAlreadyFollowed] = useState(false);
-  const [noOfFollowers, setNoOfFollowers] = useState(0);
+  const [alreadyConnect, setAlreadyConnect] = useState(false);
+  const [noOfFollowers, setFollowers] = useState(0);
+  const [noOfFriends, setNoOfFriends] = useState(0);
+  const userId = localStorage.getItem('UserId');
 
   const followPost = () => {
+    if (alreadyFollowed) return;
     if (!id) {
       window.alert('No id present to follow!');
     }
@@ -31,12 +36,45 @@ export default function UserProfile() {
       .catch((err) => window.alert(err));
   };
 
+  const connect = () => {
+    if (alreadyConnect) return;
+    if (!id) {
+      window.alert('No id present to follow!');
+    }
+    let payload = {
+      UserId: localStorage.getItem('UserId'),
+      connectionId: id,
+    };
+    axios
+      .post(`http://${ip}:8000/connect`, payload)
+      .then((response) => {
+        if (response.status === 200) {
+          window.alert('Successfully followed.');
+        }
+      })
+      .catch((err) => window.alert(err));
+  };
+
   const getFollowers = () => {
     axios
-      .get(`http:${ip}:8000/followers`, { params: { UserId: id } })
+      .get(`http://${ip}:8000/followers`, { params: { UserId: id } })
       .then((response) => {
         if (response.status === 200 && response.data.msg) {
-          setNoOfFollowers(response.data.msg);
+          const data = response.data.msg.filter((el) => el !== null);
+          setFollowers(data);
+        }
+      })
+      .catch((err) => window.alert(err));
+  };
+  const getFriends = () => {
+    axios
+      .get(`http://${ip}:8000/is-friend`, {
+        params: { connectionId: id, UserId: userId },
+      })
+      .then((response) => {
+        console.log('is friend', response);
+        if (response.status === 200 && response.data.msg) {
+          setNoOfFriends(response.data.msg);
         }
       })
       .catch((err) => window.alert(err));
@@ -45,7 +83,7 @@ export default function UserProfile() {
   useEffect(() => {
     if (id) {
       axios
-        .get(`http:${ip}:8000/is-follower`, {
+        .get(`http://${ip}:8000/is-follower`, {
           params: { followerId: localStorage.getItem('UserId'), UserId: id },
         })
         .then((response) => {
@@ -54,8 +92,19 @@ export default function UserProfile() {
           }
         })
         .catch((err) => window.alert(err));
+      // axios
+      //   .get(`http://${ip}:8000/is-connect`, {
+      //     params: { followerId: localStorage.getItem('UserId'), UserId: id },
+      //   })
+      //   .then((response) => {
+      //     if (response.status === 200 && response.data.msg === 1) {
+      //       setAlreadyConnect(true);
+      //     }
+      //   })
+      //   .catch((err) => window.alert(err));
 
       getFollowers();
+      getFriends();
     }
   }, [id]);
 
@@ -77,23 +126,59 @@ export default function UserProfile() {
             <div className="d-flex justify-content-around m-2">
               <button
                 type="button"
-                class="btn btn-light w-25"
+                className="btn btn-light w-25"
                 onClick={followPost}
               >
-                Follow
+                {alreadyFollowed ? 'Following' : 'Follow'}
               </button>
-              <button type="button" class="btn btn-light w-25">
+              <button
+                type="button"
+                className="btn btn-light w-25"
+                onClick={connect}
+              >
                 Connect
               </button>
             </div>
             <div className=" d-flex justify-content-around m-2">
-              <button type="button" class="btn btn-light w-25">
-                Followers
+              <button
+                type="button"
+                className="btn btn-light w-25"
+                onClick={() => navigate(`/followers/${id}`)}
+              >
+                Followers &nbsp;{noOfFollowers.length}
               </button>
-              <button type="button" class="btn btn-light w-25">
-                Friends
+              <button type="button" className="btn btn-light w-25">
+                Friends &nbsp;{noOfFriends}
               </button>
             </div>
+
+            {noOfFollowers.length ? (
+              <div className="d-flex justify-content-around m-2">
+                <button
+                  type="button"
+                  className="btn btn-link text-light w-25"
+                  onClick={() => navigate(`/ratings/${id}`)}
+                >
+                  Username's rated news
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-link text-light w-25"
+                  onClick={() => navigate(`/watch-later/${id}`)}
+                >
+                  Username's watch later news
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-link text-light w-25"
+                  onClick={() => navigate(`/friends/${id}`)}
+                >
+                  Username's friends
+                </button>
+              </div>
+            ) : (
+              ''
+            )}
           </div>
         </div>
       </div>

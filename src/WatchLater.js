@@ -4,12 +4,13 @@ import Navbar2 from './navbar2';
 import axios from 'axios';
 import ip from './ipaddress';
 import './NewContainer.css';
+import { useParams } from 'react-router-dom';
 export default function WatchLater() {
-  const [watchLater,setWatchLater] = useState([]);
+  const { id } = useParams();
+  const [watchLater, setWatchLater] = useState([]);
   const [containtDisplay, SetContaintDisplay] = useState(false);
-  const userId = localStorage.getItem('UserId');
   useEffect(() => {
-    const data = { UserId: userId };
+    const data = { UserId: id };
     axios
       .get(`http://${ip}:8000/watch`, { params: data })
       .then((response) => {
@@ -19,7 +20,7 @@ export default function WatchLater() {
       .catch((error) => {
         console.log('error while fetching ratings', error);
       });
-  }, [userId]);
+  }, [id]);
   return (
     <div>
       <Navbar1 />
@@ -31,7 +32,7 @@ export default function WatchLater() {
             watchLater.map((data, index) => {
               return (
                 <div className="col-lg-4 mt-4" key={index}>
-                  <div className="Card" >
+                  <div className="Card">
                     <img src={data.urlToImage} className="CardImage" alt="" />
 
                     <div className="CardDetails">
@@ -72,6 +73,11 @@ export default function WatchLater() {
               );
             })}
         </div>
+        {watchLater.length === 0 && (
+          <div className="text-center">
+            You haven't added any news in watch later.
+          </div>
+        )}
       </div>
     </div>
   );

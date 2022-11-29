@@ -82,14 +82,12 @@ const Navbar2 = () => {
           </NavLink>
         );
       })}
-      <button
-        className="btn btn-primary"
-        onClick={() => {
-          navigate('/select-categories');
-        }}
+      <NavLink
+        to={'/select-categories'}
+        className={({ isActive }) => (isActive ? 'active' : 'inactive')}
       >
         Add more categories
-      </button>
+      </NavLink>
       {userSelectedCategories.length && (
         <select
           name="cars"

@@ -20,9 +20,9 @@ function SideProfile(data) {
     profile_url: '',
   });
   const navigate = useNavigate();
-
+  const userId = localStorage.getItem('UserId');
   useEffect(() => {
-    const user = { UserId: localStorage.getItem('UserId') };
+    const user = { UserId: userId };
     axios
       .get(`http://${ip}:8000/user_name`, {
         params: user,
@@ -86,7 +86,7 @@ function SideProfile(data) {
       <div
         className="SettingButton"
         onClick={() => {
-          navigate('/ratings');
+          navigate(`/ratings/${userId}`);
         }}
       >
         <FontAwesomeIcon icon={faStar} /> Ratings
@@ -94,7 +94,7 @@ function SideProfile(data) {
       <div
         className="SettingButton"
         onClick={() => {
-          navigate('/watch-later');
+          navigate(`/watch-later/${userId}`);
         }}
       >
         <FontAwesomeIcon icon={faClock} /> Watch Later

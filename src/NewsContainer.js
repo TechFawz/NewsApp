@@ -78,18 +78,44 @@ function CardContainer(item) {
     starData: null,
   });
   const userId = localStorage.getItem('UserId');
-
+  //   {
+  //     "UserId":"1",
+  //     "author":"SJ",
+  //     "content":"S",
+  //     "description":"SJ5",
+  //     "publishedAt":"22Nov22",
+  //     "title":"hello",
+  //     "url":"13raeg",
+  //     "urlToImage":"test.com",
+  //     "ratings":0,
+  //     "watchList": 1
+  // }
   const saveRating = (count, data) => {
     setStarData({
       ...starData,
       starCount: count,
       starData: data,
     });
+    const {
+      author,
+      content,
+      description,
+      publishedAt,
+      title,
+      url,
+      urlToImage,
+    } = data;
     axios
       .post(`http://${ip}:8000/rate`, {
-        ...data,
-        ratings: count,
         UserId: userId,
+        author,
+        content,
+        description,
+        publishedAt,
+        title,
+        url,
+        urlToImage,
+        ratings: count,
         watchList: 0,
       })
       .then((response) => {
