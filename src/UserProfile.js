@@ -36,6 +36,7 @@ export default function UserProfile() {
         if (response.status === 200) {
           window.alert('Successfully followed.');
           getFollowers();
+          checkIsFollower();
         }
       })
       .catch((err) => window.alert(err));
@@ -56,6 +57,7 @@ export default function UserProfile() {
         if (response.status === 200) {
           window.alert('Successfully connect.');
           getFriends();
+          checkRequestSent();
         }
       })
       .catch((err) => window.alert(err));

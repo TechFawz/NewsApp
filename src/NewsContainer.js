@@ -119,9 +119,11 @@ function CardContainer(item) {
         watchList: 0,
       })
       .then((response) => {
+        window.alert('rating save successfully!');
         console.log('response after ratings is', response);
       })
       .catch((error) => {
+        alert('error while save rating');
         console.log('error while rating', error);
       });
   };
@@ -134,9 +136,11 @@ function CardContainer(item) {
         watchList: 1,
       })
       .then((response) => {
+        window.alert('watch later save successfully!');
         console.log('response after watch is', response);
       })
       .catch((error) => {
+        alert('error while saving watch later');
         console.log('error while watchlater', error);
       });
   };
