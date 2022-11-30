@@ -15,7 +15,9 @@ export default function UserProfile() {
   const [alreadyConnect, setAlreadyConnect] = useState(false);
   const [noOfFollowers, setFollowers] = useState(0);
   const [noOfFriends, setNoOfFriends] = useState(0);
-  const [userData, setUserData] = useState(null);
+  const [currentUserData, setCurrentUserData] = useState({
+    FirstName: 'Username',
+  });
   const userId = localStorage.getItem('UserId');
 
   const followPost = () => {
@@ -32,6 +34,7 @@ export default function UserProfile() {
       .then((response) => {
         if (response.status === 200) {
           window.alert('Successfully followed.');
+          getFollowers();
         }
       })
       .catch((err) => window.alert(err));
@@ -50,7 +53,8 @@ export default function UserProfile() {
       .post(`http://${ip}:8000/connect`, payload)
       .then((response) => {
         if (response.status === 200) {
-          window.alert('Successfully followed.');
+          window.alert('Successfully connect.');
+          getFriends();
         }
       })
       .catch((err) => window.alert(err));
@@ -62,7 +66,7 @@ export default function UserProfile() {
       .then((response) => {
         if (response.status === 200 && response.data.msg) {
           const data = response.data.msg.filter((el) => el !== null);
-          setFollowers(data);
+          setFollowers([...data]);
         }
       })
       .catch((err) => window.alert(err));
@@ -81,41 +85,35 @@ export default function UserProfile() {
       .catch((err) => window.alert(err));
   };
 
+  const checkIsFollower = () => {
+    axios
+      .get(`http://${ip}:8000/is-follower`, {
+        params: { followerId: localStorage.getItem('UserId'), UserId: id },
+      })
+      .then((response) => {
+        if (response.status === 200 && response.data.msg === 1) {
+          setAlreadyFollowed(true);
+        }
+      })
+      .catch((err) => window.alert(err));
+  };
+  const getUserDetails = () => {
+    axios
+      .get(`http://${ip}:8000/userDetails`, {
+        params: { UserId: id },
+      })
+      .then((response) => {
+        if (response && response.data) {
+          setCurrentUserData(response.data?.msg);
+        }
+      })
+      .catch((err) => window.alert(err));
+  };
+
   useEffect(() => {
     if (id) {
-      axios
-        .get(`http://${ip}:8000/is-follower`, {
-          params: { followerId: localStorage.getItem('UserId'), UserId: id },
-        })
-        .then((response) => {
-          if (response.status === 200 && response.data.msg === 1) {
-            setAlreadyFollowed(true);
-          }
-        })
-        .catch((err) => window.alert(err));
-      // axios
-      //   .get(`http://${ip}:8000/is-connect`, {
-      //     params: { followerId: localStorage.getItem('UserId'), UserId: id },
-      //   })
-      //   .then((response) => {
-      //     if (response.status === 200 && response.data.msg === 1) {
-      //       setAlreadyConnect(true);
-      //     }
-      //   })
-      //   .catch((err) => window.alert(err));
-
-      axios
-        .get(`http://${ip}:8000/userDetails`, {
-          params: { UserId: id },
-        })
-        .then((response) => {
-          console.log('@@@@', response);
-          if (response.data.msg) {
-            setUserData(response.data.msg);
-          }
-        })
-        .catch((err) => window.alert(err));
-
+      checkIsFollower();
+      getUserDetails();
       getFollowers();
       getFriends();
     }
@@ -134,7 +132,7 @@ export default function UserProfile() {
           />
           <div className="card-body">
             <h5 className="card-title text-light">
-              {userData ? userData?.FirstName : ''}
+              {currentUserData.FirstName}
             </h5>
           </div>
           <div className="d-flex flex-column ">
@@ -160,7 +158,8 @@ export default function UserProfile() {
                 className="btn btn-light w-25"
                 onClick={() => navigate(`/followers/${id}`)}
               >
-                Followers &nbsp;{noOfFollowers.length}
+                Followers &nbsp;
+                {noOfFollowers.length}
               </button>
               <button type="button" className="btn btn-light w-25">
                 Friends &nbsp;{noOfFriends}
@@ -174,21 +173,22 @@ export default function UserProfile() {
                   className="btn btn-link text-light w-25"
                   onClick={() => navigate(`/ratings/${id}`)}
                 >
-                  {userData ? userData?.FirstName : ''}'s rated news
+                  {`${currentUserData.FirstName} rated news`}
                 </button>
                 <button
                   type="button"
                   className="btn btn-link text-light w-25"
                   onClick={() => navigate(`/watch-later/${id}`)}
                 >
-                  {userData ? userData?.FirstName : ''}'s watch later news
+                  {`${currentUserData.FirstName} watch later news`}
                 </button>
                 <button
                   type="button"
                   className="btn btn-link text-light w-25"
                   onClick={() => navigate(`/friends/${id}`)}
                 >
-                  {userData ? userData?.FirstName : ''}'s friends
+                  {`${currentUserData.FirstName} friends`}
+                  friends
                 </button>
               </div>
             ) : (

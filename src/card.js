@@ -19,7 +19,7 @@ function Card(item) {
   };
   return (
     <div className="Card">
-      <img src={data.urlToImage} className="CardImage" />
+      <img src={data.urlToImage} className="CardImage" alt="card_image" />
 
       <div className="CardDetails">
         <div className="CardHeading">{data.title}</div>

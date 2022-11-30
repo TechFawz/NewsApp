@@ -19,7 +19,14 @@ const UserFriendsOrFollowers = () => {
       .get(`http://${ip}:8000/${pathname}`, { params: { UserId: id } })
       .then((response) => {
         if (response && response.data) {
-          setFriends(response.data.msg.filter((data) => data !== null));
+          pathname === 'followers' &&
+            setFriends(response.data.msg.filter((data) => data !== null));
+          const data = [];
+          response.data.msg.forEach((el) => {
+            data.push(...el);
+          });
+          // console.log('data is', data, pathname);
+          pathname === 'friends' && setFriends(data);
         }
       })
       .catch((err) => {

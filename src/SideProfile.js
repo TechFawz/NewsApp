@@ -7,6 +7,7 @@ import {
   faEnvelope,
   faClock,
   faStar,
+  faSearch,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import profile_default from './Image/profile_default.png';
@@ -98,6 +99,22 @@ function SideProfile(data) {
         }}
       >
         <FontAwesomeIcon icon={faClock} /> Watch Later
+      </div>
+      <div
+        className="SettingButton"
+        onClick={() => {
+          navigate(`/pending-requests`);
+        }}
+      >
+        <FontAwesomeIcon icon={faClock} /> Pending Requests
+      </div>
+      <div
+        className="SettingButton"
+        onClick={() => {
+          navigate(`/search`);
+        }}
+      >
+        <FontAwesomeIcon icon={faSearch} /> Search for user
       </div>
       <div className="SettingButton" onClick={LogOut}>
         <FontAwesomeIcon icon={faSignOut} /> Log Out
