@@ -21,12 +21,17 @@ const UserFriendsOrFollowers = () => {
         if (response && response.data) {
           pathname === 'followers' &&
             setFriends(response.data.msg.filter((data) => data !== null));
+        } else {
           const data = [];
           response.data.msg.forEach((el) => {
-            data.push(...el);
+            if (Array.isArray(el) && el.length > 0) {
+              data.push(...el);
+            } else {
+              data.push(el);
+            }
           });
           // console.log('data is', data, pathname);
-          pathname === 'friends' && setFriends(data);
+          pathname === 'friends' && setFriends();
         }
       })
       .catch((err) => {
@@ -39,7 +44,7 @@ const UserFriendsOrFollowers = () => {
       <Navbar1 />
       <Navbar2 />
       <div className="container-fluid" style={{ marginTop: '10rem' }}>
-        <ul className="w-75 mx-auto">
+        <ul className="w-50 mx-auto ">
           {friends.length > 0
             ? friends.map((user, index) => {
                 return (
@@ -51,7 +56,11 @@ const UserFriendsOrFollowers = () => {
                     style={{ cursor: 'pointer' }}
                   >
                     <span> {user.FirstName}</span>
-                    <button className="btn btn-primary"> Connect</button>
+                    {user.UserId === localStorage.getItem('UserId') ? (
+                      ''
+                    ) : (
+                      <button className="btn btn-primary"> Connect</button>
+                    )}
                   </li>
                 );
               })

@@ -15,6 +15,7 @@ export default function UserProfile() {
   const [alreadyConnect, setAlreadyConnect] = useState(false);
   const [noOfFollowers, setFollowers] = useState(0);
   const [noOfFriends, setNoOfFriends] = useState(0);
+  const [blocked, setBlocked] = useState('');
   const [currentUserData, setCurrentUserData] = useState({
     FirstName: 'Username',
   });
@@ -79,7 +80,7 @@ export default function UserProfile() {
       .then((response) => {
         console.log('is friend', response);
         if (response.status === 200 && response.data.msg) {
-          setNoOfFriends(response.data.msg);
+          setAlreadyConnect(true);
         }
       })
       .catch((err) => window.alert(err));
@@ -97,6 +98,18 @@ export default function UserProfile() {
       })
       .catch((err) => window.alert(err));
   };
+  const checkRequestSent = () => {
+    axios
+      .get(`http://${ip}:8000/is-pending`, {
+        params: { connectionId: localStorage.getItem('UserId'), UserId: id },
+      })
+      .then((response) => {
+        if (response.status === 200 && response.data.msg === 1) {
+          setAlreadyConnect(true);
+        }
+      })
+      .catch((err) => window.alert(err));
+  };
   const getUserDetails = () => {
     axios
       .get(`http://${ip}:8000/userDetails`, {
@@ -110,12 +123,30 @@ export default function UserProfile() {
       .catch((err) => window.alert(err));
   };
 
+  const blockUser = () => {
+    axios
+      .post(`http://${ip}:8000/block`, {
+        connectionId: localStorage.getItem('UserId'),
+        UserId: id,
+      })
+      .then((response) => {
+        if (
+          response &&
+          (response.status === 200) & (response.data.msg === 'blocked')
+        ) {
+          setBlocked(true);
+        }
+      })
+      .catch((err) => window.alert(err));
+  };
+
   useEffect(() => {
     if (id) {
       checkIsFollower();
       getUserDetails();
       getFollowers();
       getFriends();
+      checkRequestSent();
     }
   }, [id]);
 
@@ -137,20 +168,28 @@ export default function UserProfile() {
           </div>
           <div className="d-flex flex-column ">
             <div className="d-flex justify-content-around m-2">
-              <button
-                type="button"
-                className="btn btn-light w-25"
-                onClick={followPost}
-              >
-                {alreadyFollowed ? 'Following' : 'Follow'}
-              </button>
-              <button
-                type="button"
-                className="btn btn-light w-25"
-                onClick={connect}
-              >
-                Connect
-              </button>
+              {alreadyFollowed ? (
+                ''
+              ) : (
+                <button
+                  type="button"
+                  className="btn btn-light w-25"
+                  onClick={followPost}
+                >
+                  {alreadyFollowed ? 'Following' : 'Follow'}
+                </button>
+              )}
+              {alreadyConnect ? (
+                ''
+              ) : (
+                <button
+                  type="button"
+                  className="btn btn-light w-25"
+                  onClick={connect}
+                >
+                  Connect
+                </button>
+              )}
             </div>
             <div className=" d-flex justify-content-around m-2">
               <button
@@ -163,6 +202,13 @@ export default function UserProfile() {
               </button>
               <button type="button" className="btn btn-light w-25">
                 Friends &nbsp;{noOfFriends}
+              </button>
+              <button
+                onClick={() => blockUser()}
+                type="button"
+                className="btn btn-light w-25"
+              >
+                Block
               </button>
             </div>
 

@@ -8,6 +8,7 @@ import {
   faClock,
   faStar,
   faSearch,
+  faUser,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import profile_default from './Image/profile_default.png';
@@ -75,6 +76,14 @@ function SideProfile(data) {
         }}
       >
         <FontAwesomeIcon icon={faCog} /> Settings
+      </div>
+      <div
+        className="SettingButton"
+        onClick={() => {
+          navigate(`/user/${localStorage.getItem('UserId')}`);
+        }}
+      >
+        <FontAwesomeIcon icon={faUser} /> Profile
       </div>
       <div
         className="SettingButton"
