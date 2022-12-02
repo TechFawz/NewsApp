@@ -63,7 +63,7 @@ function CreateAccount() {
         <MDBInput wrapperClass="mb-4" label="Country" id="form5" type="text" />
 
         <p className="WrongPasword" style={StyleForWrongPassword()}>
-          {resone}
+          {resone.length > 0 ? resone : ''}
         </p>
 
         <div className="d-flex flex-row justify-content-center mb-4"></div>
@@ -82,6 +82,12 @@ function CreateAccount() {
 }
 
 function Create(SetWrongPassword, navigate, SetResone) {
+  let phoneNumber = document.getElementById('form6').value;
+  if (phoneNumber.length !== 10 || isNaN(phoneNumber)) {
+    SetWrongPassword(true);
+    SetResone('Enter phone number correctly.');
+    return;
+  }
   const Password1 = document.getElementById('form3').value;
   const Passsword2 = document.getElementById('form4').value;
   if (Password1 != Passsword2) {
@@ -95,7 +101,7 @@ function Create(SetWrongPassword, navigate, SetResone) {
     MailId: document.getElementById('form2').value,
     Password: Password1,
     Location: document.getElementById('form5').value,
-    number: document.getElementById('form6').value,
+    number: phoneNumber.value,
   };
 
   axios.get(`http://${ip}:8000/sign_up`, { params: data }).then(
