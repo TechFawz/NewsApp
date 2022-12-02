@@ -10,10 +10,12 @@ import ip from './ipaddress';
 
 function NewContainer() {
   const [data, SetData] = useState([]);
+  const [userDetail, setUserDetail] = useState(null);
 
   const location = useLocation();
   const currentRoute = location.pathname;
   const id = currentRoute.split('/')[2];
+  const UserId = localStorage.getItem('UserId');
 
   useEffect(() => {
     axios
@@ -29,15 +31,30 @@ function NewContainer() {
       });
   }, [id]);
 
+  const getUserDetails = () => {
+    axios
+      .get(`http://${ip}:8000/userDetails`, { params: { UserId } })
+      .then((response) => {
+        console.log('response of user detail is', response);
+        setUserDetail(response.data.msg);
+      })
+      .catch((error) => {
+        console.log('error while getting user details', error);
+      });
+  };
+  useEffect(() => {
+    getUserDetails();
+  }, [UserId]);
+
   return (
     <div id="NewContainter" className="NewContainter">
-      {Insert(data)}
+      {userDetail && Insert(data, userDetail)}
     </div>
   );
 }
 
-function Insert(data) {
-  if (data.length == 0) {
+function Insert(data, userdetail) {
+  if (data.length === 0) {
     return (
       <div className="reload">
         Please reload WebSite
@@ -56,9 +73,10 @@ function Insert(data) {
   if (size === 0) {
     size = 1;
   }
+
   const dataArray = DivideArray(data, size);
   return dataArray.map((item, index) => {
-    return <CardContainer data={item} key={index} />;
+    return <CardContainer data={item} key={index} userDetail={userdetail} />;
   });
 }
 
@@ -73,23 +91,13 @@ function DivideArray(array, size) {
 
 function CardContainer(item) {
   const data = item.data;
+  const userDetail = item.userDetail;
   const [starData, setStarData] = useState({
     starCount: 0,
     starData: null,
   });
   const userId = localStorage.getItem('UserId');
-  //   {
-  //     "UserId":"1",
-  //     "author":"SJ",
-  //     "content":"S",
-  //     "description":"SJ5",
-  //     "publishedAt":"22Nov22",
-  //     "title":"hello",
-  //     "url":"13raeg",
-  //     "urlToImage":"test.com",
-  //     "ratings":0,
-  //     "watchList": 1
-  // }
+
   const saveRating = (count, data) => {
     setStarData({
       ...starData,
@@ -153,6 +161,7 @@ function CardContainer(item) {
             data={item}
             saveRating={saveRating}
             saveWatchLater={saveWatchLater}
+            userDetail={userDetail}
           />
         );
       })}

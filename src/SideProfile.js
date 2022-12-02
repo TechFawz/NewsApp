@@ -8,7 +8,7 @@ import {
   faClock,
   faStar,
   faSearch,
-  faUser,
+  faUser
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import profile_default from './Image/profile_default.png';
