@@ -54,6 +54,12 @@ function CreateAccount() {
           id="form4"
           type="password"
         />
+        <MDBInput
+          wrapperClass="mb-4"
+          label="Your phone number"
+          id="form6"
+          type="tel"
+        />
         <MDBInput wrapperClass="mb-4" label="Country" id="form5" type="text" />
 
         <p className="WrongPasword" style={StyleForWrongPassword()}>
@@ -89,6 +95,7 @@ function Create(SetWrongPassword, navigate, SetResone) {
     MailId: document.getElementById('form2').value,
     Password: Password1,
     Location: document.getElementById('form5').value,
+    number: document.getElementById('form6').value,
   };
 
   axios.get(`http://${ip}:8000/sign_up`, { params: data }).then(
