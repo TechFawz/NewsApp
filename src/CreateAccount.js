@@ -101,7 +101,7 @@ function Create(SetWrongPassword, navigate, SetResone) {
     MailId: document.getElementById('form2').value,
     Password: Password1,
     Location: document.getElementById('form5').value,
-    number: phoneNumber.value,
+    number: phoneNumber,
   };
 
   axios.get(`http://${ip}:8000/sign_up`, { params: data }).then(
