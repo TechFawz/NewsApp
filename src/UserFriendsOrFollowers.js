@@ -18,21 +18,16 @@ const UserFriendsOrFollowers = () => {
     axios
       .get(`http://${ip}:8000/${pathname}`, { params: { UserId: id } })
       .then((response) => {
-        if (response && response.data) {
-          pathname === 'followers' &&
-            setFriends(response.data.msg.filter((data) => data !== null));
-        } else {
-          const data = [];
-          response.data.msg.forEach((el) => {
-            if (Array.isArray(el) && el.length > 0) {
-              data.push(...el);
-            } else {
-              data.push(el);
-            }
-          });
-          // console.log('data is', data, pathname);
-          pathname === 'friends' && setFriends();
-        }
+        pathname === 'followers' &&
+          setFriends(response.data.msg.filter((data) => data !== null));
+        const data = [];
+        response.data.msg.forEach((el) => {
+          if (Array.isArray(el) && el.length > 0) {
+            data.push(...el);
+          }
+        });
+        // console.log('data is', data, pathname);
+        pathname === 'friends' && setFriends(data);
       })
       .catch((err) => {
         window.alert(err);

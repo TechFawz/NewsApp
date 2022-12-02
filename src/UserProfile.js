@@ -15,10 +15,11 @@ export default function UserProfile() {
   const [alreadyConnect, setAlreadyConnect] = useState(false);
   const [noOfFollowers, setFollowers] = useState(0);
   const [noOfFriends, setNoOfFriends] = useState(0);
-  const [blocked, setBlocked] = useState('');
+  const [blocked, setBlocked] = useState(false);
   const [currentUserData, setCurrentUserData] = useState({
     FirstName: 'Username',
   });
+  const [isAlreadyFriend, setIsAlreadyFriend] = useState(false);
   const userId = localStorage.getItem('UserId');
 
   const followPost = () => {
@@ -56,7 +57,6 @@ export default function UserProfile() {
       .then((response) => {
         if (response.status === 200) {
           window.alert('Successfully connect.');
-          getFriends();
           checkRequestSent();
         }
       })
@@ -76,13 +76,21 @@ export default function UserProfile() {
   };
   const getFriends = () => {
     axios
-      .get(`http://${ip}:8000/is-friend`, {
-        params: { UserId: id, connectionId: userId },
+      .get(`http://${ip}:8000/friends`, {
+        params: { UserId: userId },
       })
       .then((response) => {
         console.log('is friend', response);
         if (response.status === 200 && response.data.msg) {
-          setAlreadyConnect(true);
+          let data = [];
+          response?.data?.msg?.forEach((el) => {
+            if (Array.isArray(el) && el.length > 0) {
+              data.push(...el);
+            }
+          });
+          const isFriendFlag = data.some((el) => el.UserId === id);
+          setAlreadyConnect(isFriendFlag);
+          setNoOfFriends([...data]);
         }
       })
       .catch((err) => window.alert(err));
@@ -125,6 +133,20 @@ export default function UserProfile() {
       .catch((err) => window.alert(err));
   };
 
+  const isFriend = () => {
+    axios
+      .get(`http://${ip}:8000/is-friend`, {
+        params: { connectionId: userId, UserId: id },
+      })
+      .then((response) => {
+        console.log('is friend response', response);
+        setIsAlreadyFriend(response.data.msg === 1);
+      })
+      .catch((error) => {
+        console.log('error while is friend', error);
+      });
+  };
+
   const blockUser = () => {
     axios
       .post(`http://${ip}:8000/block`, {
@@ -136,6 +158,7 @@ export default function UserProfile() {
           response &&
           (response.status === 200) & (response.data.msg === 'blocked')
         ) {
+          window.alert('User is blocked');
           setBlocked(true);
         }
       })
@@ -149,6 +172,7 @@ export default function UserProfile() {
       getFollowers();
       getFriends();
       checkRequestSent();
+      isFriend();
     }
   }, [id]);
 
@@ -170,7 +194,7 @@ export default function UserProfile() {
           </div>
           <div className="d-flex flex-column ">
             <div className="d-flex justify-content-around m-2">
-              {alreadyFollowed ? (
+              {alreadyFollowed || userId === id ? (
                 ''
               ) : (
                 <button
@@ -178,10 +202,10 @@ export default function UserProfile() {
                   className="btn btn-light w-25"
                   onClick={followPost}
                 >
-                  {alreadyFollowed ? 'Following' : 'Follow'}
+                  Follow
                 </button>
               )}
-              {alreadyConnect ? (
+              {alreadyConnect || userId === id ? (
                 ''
               ) : (
                 <button
@@ -202,19 +226,25 @@ export default function UserProfile() {
                 Followers &nbsp;
                 {noOfFollowers.length}
               </button>
-              <button type="button" className="btn btn-light w-25">
-                Friends &nbsp;{noOfFriends}
-              </button>
               <button
-                onClick={() => blockUser()}
                 type="button"
                 className="btn btn-light w-25"
+                onClick={() => navigate(`/friends/${id}`)}
               >
-                Block
+                Friends &nbsp;{noOfFriends.length}
               </button>
+              {!blocked && userId !== id && isAlreadyFriend && (
+                <button
+                  onClick={() => blockUser()}
+                  type="button"
+                  className="btn btn-light w-25"
+                >
+                  Block
+                </button>
+              )}
             </div>
 
-            {noOfFollowers.length ? (
+            {!blocked && noOfFollowers.length ? (
               <div className="d-flex justify-content-around m-2">
                 <button
                   type="button"

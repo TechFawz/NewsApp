@@ -17,6 +17,15 @@ function Card(item) {
   const handleWatchLater = () => {
     item.saveWatchLater(data);
   };
+  const shareOnWhatsapp=()=>{
+    let url = `https://web.whatsapp.com/send?phone=${+919588500964}`;
+    
+    // Appending the message to the URL by encoding it
+      url += `&text=${encodeURI(data.title)}&app_absent=0`;
+
+    // Open our newly created URL in a new tab to send the message
+      window.open(url);
+  }
   return (
     <div className="Card">
       <img src={data.urlToImage} className="CardImage" alt="card_image" />
@@ -50,6 +59,7 @@ function Card(item) {
             <a className="SmallButton" href={data.url}>
               Link
             </a>
+            <button onClick={shareOnWhatsapp}>share on whatsapp</button>
           </div>
         </div>
         <div className="CardOption">
