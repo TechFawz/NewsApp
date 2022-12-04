@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './navbar2.css';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import {} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { countries } from 'country-data';
@@ -88,6 +88,12 @@ const Navbar2 = () => {
       >
         Add more categories
       </NavLink>
+      <NavLink
+        to={'/live-matches'}
+        className={({ isActive }) => (isActive ? 'active' : 'inactive')}
+      >
+        Live Matches
+      </NavLink>
       {userSelectedCategories.length && (
         <select
           name="cars"
@@ -103,6 +109,23 @@ const Navbar2 = () => {
           })}
         </select>
       )}
+      <select
+        name="matched"
+        onChange={(e) => {
+          if (e.target.value === 'cricket') {
+            return window.open('https://cricbuzz.com');
+          } else {
+            return window.open(
+              'https://www.flashscore.in/football/world/world-cup/#/2/8/823QwKIu/draw'
+            );
+          }
+        }}
+        value=""
+      >
+        <option value="">Select sport</option>
+        <option value="cricket">Cricket Score</option>
+        <option value="football">Football Score</option>
+      </select>
     </div>
   );
 };

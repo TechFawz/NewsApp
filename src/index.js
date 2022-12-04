@@ -26,6 +26,7 @@ import UserProfile from './UserProfile';
 import SearchUserCards from './SearchUserCards';
 import PendingRequests from './PendingRequests';
 import UserFriendsOrFollowers from './UserFriendsOrFollowers';
+import LiveMatches from './LiveMatches';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -57,6 +58,7 @@ export default function App() {
         </Route>
         <Route path="invite" element={<Invite />} />
         <Route path="pending-requests" element={<PendingRequests />} />
+        <Route path="live-matches" element={<LiveMatches />} />
         <Route path="search" element={<SearchUserCards />} />
         <Route path="user/:id" element={<UserProfile />} />
         <Route path="friends/:id" element={<UserFriendsOrFollowers />} />
