@@ -20,6 +20,9 @@ export default function UserProfile() {
     FirstName: 'Username',
   });
   const [isAlreadyFriend, setIsAlreadyFriend] = useState(false);
+  const [isBothUserHaveSameLocation, setIsBothUserHaveSameLocation] =
+    useState(false);
+  const [profileUser, setProfileUserDetails] = useState(null);
   const userId = localStorage.getItem('UserId');
 
   const followPost = () => {
@@ -126,11 +129,25 @@ export default function UserProfile() {
         params: { UserId: id },
       })
       .then((response) => {
+        console.log('current user data', response);
         if (response && response.data) {
           setCurrentUserData(response.data?.msg);
         }
       })
       .catch((err) => window.alert(err));
+  };
+
+  const getProfileUserDetails = () => {
+    axios
+      .get(`http://${ip}:8000/userDetails`, {
+        params: { UserId: userId },
+      })
+      .then((response) => {
+        console.log('profile user data', response);
+        if (response && response.data) {
+          setProfileUserDetails(response.data?.msg);
+        }
+      });
   };
 
   const isFriend = () => {
@@ -173,6 +190,8 @@ export default function UserProfile() {
       getFriends();
       checkRequestSent();
       isFriend();
+      getProfileUserDetails();
+      console.log('#########', currentUserData, profileUser);
     }
   }, [id]);
   const shareOnWhatsapp = () => {
@@ -183,6 +202,19 @@ export default function UserProfile() {
 
     // Open our newly created URL in a new tab to send the message
     window.open(url);
+  };
+
+  const showUserInterest = () => {
+    if (!blocked && noOfFollowers.length) {
+      return true;
+    } else if (
+      currentUserData &&
+      profileUser &&
+      currentUserData.location === profileUser.location
+    ) {
+      return true;
+    }
+    return false;
   };
 
   return (
@@ -253,7 +285,7 @@ export default function UserProfile() {
               )}
             </div>
 
-            {!blocked && noOfFollowers.length ? (
+            {showUserInterest() ? (
               <div className="d-flex justify-content-around m-2">
                 <button
                   type="button"

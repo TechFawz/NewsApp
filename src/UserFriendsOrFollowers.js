@@ -51,11 +51,7 @@ const UserFriendsOrFollowers = () => {
                     style={{ cursor: 'pointer' }}
                   >
                     <span> {user.FirstName}</span>
-                    {user.UserId === localStorage.getItem('UserId') ? (
-                      ''
-                    ) : (
-                      <button className="btn btn-primary"> Connect</button>
-                    )}
+                    {user.UserId === localStorage.getItem('UserId') ? '' : ''}
                   </li>
                 );
               })
